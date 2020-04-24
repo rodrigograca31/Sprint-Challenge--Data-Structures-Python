@@ -11,8 +11,19 @@ class RingBuffer:
         # if self.current is none:
         #     self.current = item
 
-        if self.storage.length+1 > self.capacity:
-            print("too much")
+        if self.storage.length < self.capacity:
+            self.storage.add_to_tail(item)
+            self.current = self.storage.tail
+
+        if self.storage.length == self.capacity:
+            # print("too much")
+
+            self.current.value = item
+            if self.current == self.storage.tail:
+                self.current = self.storage.head
+            else:
+                self.current = self.current.next
+
             # self.storage.head.next.insert_before(item)
             # self.storage.remove_from_head()
             # print(self.storage.remove_from_tail())
@@ -37,9 +48,6 @@ class RingBuffer:
             #     print(newDLL.head.value)
             #     newDLL.head = newDLL.head.next
             # pass
-        else:
-            self.storage.add_to_tail(item)
-            self.current = item
 
     def get(self):
         # Note:  This is the only [] allowed
@@ -50,12 +58,12 @@ class RingBuffer:
         # return [number for number in self.storage if number != None]
         # return list(filter(lambda x: x != None, self.storage))
 
-        gg = self.storage.head
+        current = self.storage.head
         # print(gg.next)
-        while gg:
-            print(gg.value)
-            list_buffer_contents.append(gg.value)
-            gg = gg.next
+        while current:
+            # print(gg.value)
+            list_buffer_contents.append(current.value)
+            current = current.next
 
         return list_buffer_contents
 
@@ -95,6 +103,7 @@ buffer.append('c')
 buffer.append('d')
 buffer.append('e')
 buffer.append('f')
+buffer.append('g')
 print()
 print(buffer.storage.length)
 print()
